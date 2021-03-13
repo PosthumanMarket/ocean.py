@@ -5,7 +5,6 @@
 
 from ocean_lib.models.compute_input import ComputeInput
 from ocean_lib.models.data_token import DataToken
-from ocean_lib.ocean.ocean import Ocean
 from ocean_lib.web3_internal.constants import ZERO_ADDRESS
 from ocean_utils.agreements.service_types import ServiceTypes
 from tests.resources.ddo_helpers import (
@@ -31,19 +30,8 @@ class Setup:
         self.consumer_ocean_instance = get_consumer_ocean_instance()
 
 
-def test_metadaCacheUri_version():
-    config_dict = {"metadataCacheUri": "http://ItWorked.com", "network": "rinkeby"}
-    ocean_instance = Ocean(config=config_dict)
-    assert "http://ItWorked.com" == ocean_instance.config.aquarius_url
-
-
-def test_metadataStoreUri_version():
-    config_dict = {"metadataStoreUri": "http://ItWorked.com", "network": "rinkeby"}
-    ocean_instance = Ocean(config=config_dict)
-    assert "http://ItWorked.com" == ocean_instance.config.aquarius_url
-
-
 def process_order(ocean_instance, publisher_wallet, consumer_wallet, ddo, service_type):
+    """Helper function to process a compute order."""
     # Give the consumer some datatokens so they can order the service
     try:
         dt = DataToken(ddo.data_token_address)
@@ -84,6 +72,7 @@ def run_compute_test(
     algo_ddo=None,
     algo_meta=None,
 ):
+    """Helper function to bootstrap compute job creation and status checking."""
     compute_ddo = input_ddos[0]
     did = compute_ddo.did
     order_tx_id, _, service = process_order(
@@ -141,6 +130,7 @@ def run_compute_test(
 
 
 def test_compute_raw_algo():
+    """Tests that a compute job with a raw algorithm starts properly."""
     setup = Setup()
 
     # Dataset with compute service
@@ -162,6 +152,7 @@ def test_compute_raw_algo():
 
 
 def test_compute_multi_inputs():
+    """Tests that a compute job with additional Inputs (multiple assets) starts properly."""
     setup = Setup()
 
     # Dataset with compute service
